@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using University.Models;
+using SmartPark.Models;
 
-namespace University.Controllers;
+namespace SmartPark.Controllers;
 
 public class HomeController : Controller
 {
