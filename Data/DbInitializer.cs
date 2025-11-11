@@ -27,6 +27,12 @@ namespace SmartPark.Data
             context.UserSMs.AddRange(userSMja);
             context.SaveChanges();
 
+            var administrators = new Administrator[]
+            {
+                new Administrator { AdminName = "Admin1", AdminPassword = "Aksd" },
+                new Administrator { AdminName = "Admin2", AdminPassword = "bskak" }
+            };
+
             // --- SEED PARKIRIŠČA (Parking lots) ---
             var parkingL = new ParkingLot[]
             {
