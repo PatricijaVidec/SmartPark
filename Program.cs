@@ -22,6 +22,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SmartParkContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddRazorPages();
 var app = builder.Build();
 
 CreateDbIfNotExists(app);

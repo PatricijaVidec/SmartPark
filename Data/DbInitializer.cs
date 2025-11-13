@@ -59,7 +59,6 @@ namespace SmartPark.Data
             {
                 new Reservation
                 {
-                    Id = 1,
                     UserId = users[0].Id,
                     ParkingSpotId = parkingSpots[2].Id,
                     Start = DateTime.Now.AddHours(-1),
@@ -67,7 +66,6 @@ namespace SmartPark.Data
                 },
                 new Reservation
                 {
-                    Id = 2,
                     UserId = users[1].Id,
                     ParkingSpotId = parkingSpots[0].Id,
                     Start = DateTime.Now.AddHours(1),
