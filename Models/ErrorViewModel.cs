@@ -1,4 +1,4 @@
-namespace University.Models;
+namespace SmartPark.Models;
 
 public class ErrorViewModel
 {
