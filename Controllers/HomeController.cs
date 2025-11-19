@@ -19,8 +19,22 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var parkingSpots = _context.ParkingSpots.ToList();
-        return View(parkingSpots);
+        var lots = _context.ParkingLots.ToList();
+        return View(lots);
+    }
+
+    public IActionResult ParkingSpots(int lotId) // prikaze parking spots za izbran parking lot, naprej logiko nared (hopefully nardi kar hocm)
+    {
+        var lot = _context.ParkingLots
+                    .Include(l => l.ParkingSpots)
+                    .FirstOrDefault(l => l.Id == lotId);
+
+        if (lot == null)
+        {
+            return NotFound();
+        }
+
+        return View(lot); // Pass the lot along with its spots to the view
     }
 
     public IActionResult Privacy()
