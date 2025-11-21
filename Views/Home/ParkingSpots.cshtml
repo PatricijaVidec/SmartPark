@@ -43,8 +43,9 @@
                     @foreach (var item in row)
                     {
                         var spot = item.spot;
-                        var colorClass = spot.IsDisabled ? "spot-disabled" : "spot-available";
-
+                        //Parking spot unavailable instead disabled
+                        var colorClass = spot.IsDisabled ? "spot-unavailable" : "spot-available";
+                        
                         <a href="@Url.Action("Details", "ParkingSpot", new { id = spot.Id })"
                            class="parking-space-link">
 
