@@ -10,6 +10,24 @@
 
     <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-4">← Back to Parking Lots</a>
 
+    <form method="get" asp-action="ParkingSpotsFilter" asp-controller="Home">
+        <input type="hidden" name="lotId" value="@Model.Id" />
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label>Select Date & Time:</label>
+                <input type="datetime-local"
+                       name="selectedDateTime"
+                       class="form-control"
+                       value="@ViewBag.SelectedDateTime" required />
+            </div>
+
+            <div class="col-md-2 align-self-end">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
     <div class="parking-lot-container">
         @if (Model.ParkingSpots != null && Model.ParkingSpots.Count > 0)
         {
