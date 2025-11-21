@@ -1,3 +1,4 @@
+@using System.Diagnostics.Metrics
 @model SmartPark.Models.ParkingLot
 
 @{
@@ -36,12 +37,16 @@
                 .Select((spot, index) => new { spot, index })
                 .GroupBy(x => x.index / 8)
                 .ToList();
-
+                
+            
+            int counter = 0;
+            
             @foreach (var row in rows)
             {
                 <div class="parking-row">
                     @foreach (var item in row)
                     {
+                        counter++;
                         var spot = item.spot;
                         //Parking spot unavailable instead disabled
                         var colorClass = spot.IsDisabled ? "spot-unavailable" : "spot-available";
@@ -50,13 +55,13 @@
                            class="parking-space-link">
 
                             <div class="parking-space @colorClass"
-                                 title="@spot.Id - @(spot.IsDisabled ? "Disabled" : "Enabled")">
+                                 title="P - @counter - @(spot.IsDisabled ? "Disabled" : "Enabled")">
 
                                 @if(spot.IsDisabled) {
-                                    <span class="spot-id">&#9855 @spot.Id</span>
+                                    <span class="spot-id">&#9855 P - @counter</span>
                                 }
                                 else {
-                                    <span class="spot-id">@spot.Id</span>
+                                    <span class="spot-id">P - @counter</span>
                                 }
                                 
                             </div>
