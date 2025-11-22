@@ -40,28 +40,18 @@ public class HomeController : Controller
     public IActionResult ParkingSpotsFilter(int lotId, DateTime selectedDateTime)
     {
         var lot = _context.ParkingLots
-                    .Include(l => l.ParkingSpots)
-                    .ThenInclude(s => s.Reservations)
-                    .FirstOrDefault(l => l.Id == lotId);
+        .Include(p => p.ParkingSpots)
+        .FirstOrDefault(x => x.Id == lotId);
 
-        if (lot == null)
-            return NotFound();
+    foreach (var spot in lot.ParkingSpots)
+    {
+        spot.IsOccupied = _context.Reservations
+            .Any(r => r.ParkingSpotId == spot.Id &&
+                      selectedDateTime >= r.Start &&
+                      selectedDateTime <= r.End);
+    }
 
-        var occupiedStatus = new Dictionary<int, bool>();
-
-        foreach (var spot in lot.ParkingSpots)
-        {
-            bool isOccupied = spot.Reservations.Any(r =>
-                selectedDateTime >= r.Start &&
-                selectedDateTime <= r.End
-            );
-
-            occupiedStatus[spot.Id] = isOccupied;
-        }
-
-    // Pass data to the view
-    ViewBag.OccupiedStatus = occupiedStatus;
-    ViewBag.SelectedDateTime = selectedDateTime.ToString("yyyy-MM-dd HH:mm");
+    ViewBag.SelectedDateTime = selectedDateTime.ToString("yyyy-MM-ddTHH:mm");
 
     return View("ParkingSpots", lot);
 }

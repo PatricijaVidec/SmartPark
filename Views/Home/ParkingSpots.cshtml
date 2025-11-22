@@ -49,13 +49,13 @@
                         counter++;
                         var spot = item.spot;
                         //Parking spot unavailable instead disabled
-                        var colorClass = spot.IsDisabled ? "spot-unavailable" : "spot-available";
+                        var colorClass = spot.IsOccupied ? "spot-unavailable" : "spot-available";
                         
                         <a href="@Url.Action("Details", "ParkingSpot", new { id = spot.Id })"
                            class="parking-space-link">
 
                             <div class="parking-space @colorClass"
-                                 title="P - @counter - @(spot.IsDisabled ? "Disabled" : "Enabled")">
+                                 title="P - @counter - @(spot.IsOccupied ? "Disabled" : "Enabled")">
 
                                 @if(spot.IsDisabled) {
                                     <span class="spot-id">&#9855 P - @counter</span>
