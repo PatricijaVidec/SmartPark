@@ -37,6 +37,12 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="Index">Reservation</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("MyReservations", "Reservation")">My Reservations</a>
+                                </li>
+                            }
                     </ul>
                     <!-- added login partial -->
                     <partial name="_LoginPartial" /> 

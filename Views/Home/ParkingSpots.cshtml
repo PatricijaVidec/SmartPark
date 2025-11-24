@@ -21,7 +21,16 @@
                        name="selectedDateTime"
                        class="form-control"
                        value="@ViewBag.SelectedDateTime" required />
-            </div>
+        </div>
+
+        <div class="col-md-4">
+        <label>Select End Date & Time:</label>
+        <input type="datetime-local"
+               name="selectedEndTime"
+               class="form-control"
+               value="@ViewBag.SelectedEndTime"
+               required />
+        </div>
 
             <div class="col-md-2 align-self-end">
                 <button type="submit" class="btn btn-primary">Filter</button>
@@ -51,11 +60,17 @@
                         //Parking spot unavailable instead disabled
                         var colorClass = spot.IsOccupied ? "spot-unavailable" : "spot-available";
                         
-                        <a href="@Url.Action("Details", "ParkingSpot", new { id = spot.Id })"
-                           class="parking-space-link">
+                        <a href="@Url.Action("Reserve", "Reservation",
+                                new {
+                                    Id = spot.Id,
+                                    start = ViewBag.SelectedDateTime,
+                                    end = ViewBag.SelectedEndTime   // Only if you have an End time
+                                })"
+                        class="parking-space-link">
+
 
                             <div class="parking-space @colorClass"
-                                 title="P - @counter - @(spot.IsOccupied ? "Disabled" : "Enabled")">
+                                 title="P - @counter - @(spot.IsOccupied ? "Occupied" : "Enabled")">
 
                                 @if(spot.IsDisabled) {
                                     <span class="spot-id">&#9855 P - @counter</span>
