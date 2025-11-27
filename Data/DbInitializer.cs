@@ -44,40 +44,22 @@ namespace SmartPark.Data
             context.SaveChanges();
 
             // --- SEED PARKIRNA MESTA (Parking spots) ---
-            var parkingSpots = new ParkingSpot[]
+            ParkingSpot[] parkingSpots;
+            var generatedSpots = new System.Collections.Generic.List<ParkingSpot>();
+            foreach (var lot in parkingL)
             {
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[0].Id },
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = true, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-                new ParkingSpot { IsDisabled = false, ParkingLotId = parkingL[1].Id },
-
-            };
+                for (int i = 1; i <= lot.Capacity; i++)
+                {
+                    generatedSpots.Add(new ParkingSpot
+                    {
+                        ParkingLotId = lot.Id,
+                        DisplayId = i, // per-lot display number
+                        IsDisabled = i <= lot.DisabledSpots,
+                        IsOccupied = false
+                    });
+                }
+            }
+            parkingSpots = generatedSpots.ToArray();
             context.ParkingSpots.AddRange(parkingSpots);
             context.SaveChanges();
 
@@ -103,48 +85,53 @@ namespace SmartPark.Data
             context.SaveChanges();
 
         
-            var roles = new IdentityRole[] {
-            new IdentityRole{Id="1", Name="Administrator"},
-            new IdentityRole{Id="2", Name="Manager"},
-            };
-            foreach (IdentityRole r in roles)
+            // --- SEED ROLES ---
+            var roles = new IdentityRole[]
             {
-                context.Roles.Add(r);
+                new IdentityRole { Id = "1", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                new IdentityRole { Id = "2", Name = "Manager", NormalizedName = "MANAGER" }
+            };
+
+            foreach (var r in roles)
+            {
+                if (!context.Roles.Any(x => x.Name == r.Name))
+                    context.Roles.Add(r);
             }
-                var user = new User
-                {
-                    FirstName = "Bob",
-                    LastName = "Dilon",
-                    Email = "bob@example.com",
-                    NormalizedEmail = "XXXX@EXAMPLE.COM",
-                    UserName = "bob@example.com",
-                    NormalizedUserName = "bob@example.com",
-                    PhoneNumber = "+111111111111",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString("D")
-                };
-                if (!context.Users.Any(u => u.UserName == user.UserName))
-                {
-                    var password = new PasswordHasher<User>();
-                    var hashed = password.HashPassword(user,"Testni123!");
-                    user.PasswordHash = hashed;
-                    context.Users.Add(user);
-                    
-                }
-                context.SaveChanges();
-                
-                var UserRoles = new IdentityUserRole<string>[]
-                {
-                    new IdentityUserRole<string>{RoleId = roles[0].Id, UserId=user.Id},
-                    new IdentityUserRole<string>{RoleId = roles[1].Id, UserId=user.Id},
-                };
-                foreach (IdentityUserRole<string> r in UserRoles)
-                {
-                    context.UserRoles.Add(r);
-                }
+            context.SaveChanges();
+
+            // --- SEED ADMIN USER (Bob) ---
+            var admin = new User
+            {
+                FirstName = "Bob",
+                LastName = "Dilon",
+                Email = "bob@example.com",
+                NormalizedEmail = "BOB@EXAMPLE.COM",
+                UserName = "bob@example.com",
+                NormalizedUserName = "BOB@EXAMPLE.COM",
+                PhoneNumber = "+111111111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+
+            if (!context.Users.Any(u => u.UserName == admin.UserName))
+            {
+                var password = new PasswordHasher<User>();
+                admin.PasswordHash = password.HashPassword(admin, "Testni123!");
+                context.Users.Add(admin);
                 context.SaveChanges();
             }
 
+            // --- ASSIGN BOB TO ADMIN ROLE ---
+            if (!context.UserRoles.Any(ur => ur.UserId == admin.Id))
+            {
+                context.UserRoles.Add(new IdentityUserRole<string>
+                {
+                    RoleId = "1",   // Administrator
+                    UserId = admin.Id
+                });
+                context.SaveChanges();
+            }
         }
     }
+}

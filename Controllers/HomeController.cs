@@ -36,37 +36,33 @@ public class HomeController : Controller
         return View(lot);
     }
 
-    // action to filter parking spots based on selected date and time, hopefully works
-    public IActionResult ParkingSpotsFilter(int lotId, DateTime selectedDateTime)
+    public IActionResult ParkingSpotsFilter(int lotId, DateTime selectedDateTime, DateTime selectedEndTime)
     {
         var lot = _context.ParkingLots
-                    .Include(l => l.ParkingSpots)
-                    .ThenInclude(s => s.Reservations)
-                    .FirstOrDefault(l => l.Id == lotId);
-
-        if (lot == null)
-            return NotFound();
-
-        var occupiedStatus = new Dictionary<int, bool>();
+        .Include(p => p.ParkingSpots)
+        .FirstOrDefault(x => x.Id == lotId);
 
         foreach (var spot in lot.ParkingSpots)
         {
-            bool isOccupied = spot.Reservations.Any(r =>
-                selectedDateTime >= r.Start &&
-                selectedDateTime <= r.End
-            );
-
-            occupiedStatus[spot.Id] = isOccupied;
+            spot.IsOccupied = _context.Reservations
+                .Any(r => r.ParkingSpotId == spot.Id &&
+                    selectedDateTime >= r.Start &&
+                    selectedDateTime <= r.End
+                    );
         }
 
-    // Pass data to the view
-    ViewBag.OccupiedStatus = occupiedStatus;
-    ViewBag.SelectedDateTime = selectedDateTime.ToString("yyyy-MM-dd HH:mm");
+    ViewBag.SelectedDateTime = selectedDateTime;
+    ViewBag.SelectedEndTime = selectedEndTime; 
 
     return View("ParkingSpots", lot);
-}
+    }
 
     public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    public IActionResult About()
     {
         return View();
     }

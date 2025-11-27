@@ -15,6 +15,6 @@ public class Reservation
     public DateTime End { get; set; }
 
     // Relationships
-    public User User { get; set; } = null!;         // goes to an user
-    public ParkingSpot ParkingSpot { get; set; }  = null!; // Which spot is reserved
+    public User? User { get; set; }       // goes to an user
+    public ParkingSpot? ParkingSpot { get; set; } // Which spot is reserved
 }
