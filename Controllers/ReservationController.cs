@@ -80,7 +80,7 @@ namespace SmartPark.Controllers
                 return View(reservation);
             }
 
-            if (reservation.Start < DateTime.Now + TimeSpan.FromMinutes(1))
+            if (reservation.Start < DateTime.Now + TimeSpan.FromMinutes(2))
             {
                 ModelState.AddModelError("", "Start time cannot be in the past.");
                 PopulateSpotDisplay();
