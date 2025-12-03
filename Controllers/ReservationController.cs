@@ -90,8 +90,8 @@ namespace SmartPark.Controllers
             // Check for overlapping reservations for same parking spot
             bool conflict = _context.Reservations.Any(r =>
                 r.ParkingSpotId == reservation.ParkingSpotId &&
-                reservation.Start < r.End &&
-                reservation.End > r.Start
+                reservation.Start <= r.End &&
+                reservation.End >= r.Start
             );
 
             if (conflict)
