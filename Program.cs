@@ -6,15 +6,15 @@ using SmartPark.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 CHANGE #1: choose connection string (Docker stays default)
-//var connectionString = builder.Configuration.GetConnectionString("SmartParkContext");
+
+// var connectionString = builder.Configuration.GetConnectionString("SmartParkContext");
 // If/when you want Azure instead, just change the name to:
  var connectionString = builder.Configuration.GetConnectionString("AzureDatabaseOblak");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// 🔹 CHANGE #2: keep ONLY ONE DbContext registration
+// CHANGE #2: keep ONLY ONE DbContext registration
 builder.Services.AddDbContext<SmartParkContext>(options =>
     options.UseSqlServer(connectionString));
 
