@@ -80,6 +80,9 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+//this is new
+app.MapControllers();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
