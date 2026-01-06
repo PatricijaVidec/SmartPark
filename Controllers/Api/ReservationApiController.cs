@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartPark.Data;
 using SmartPark.Models;
+using SmartPark.Filters;
 
 namespace SmartPark.Controllers_Api
 {
@@ -30,6 +31,7 @@ namespace SmartPark.Controllers_Api
 
         // GET: api/ReservationApi/5
         [HttpGet("{id}")]
+        [ApiKeyAuth]
         public async Task<ActionResult<Reservation>> GetReservation(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);

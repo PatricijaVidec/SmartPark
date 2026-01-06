@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartPark.Data;
+using SmartPark.Filters;
 using SmartPark.Models;
+
 
 namespace SmartPark.Controllers_Api
 {
@@ -30,6 +32,7 @@ namespace SmartPark.Controllers_Api
 
         // GET: api/ParkingLotApi/5
         [HttpGet("{id}")]
+        [ApiKeyAuth]
         public async Task<ActionResult<ParkingLot>> GetParkingLot(int id)
         {
             var parkingLot = await _context.ParkingLots.FindAsync(id);
